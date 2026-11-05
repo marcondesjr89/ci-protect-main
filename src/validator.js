@@ -22,3 +22,14 @@ export function validateUser(user) {
     errors
   };
 }
+
+/**
+ * Sanitiza dados de entrada garantindo campos em formato padrão
+ */
+export function sanitizeUser(user) {
+  if (!user || typeof user !== "object") return null;
+  return {
+    name: typeof user.name === "string" ? user.name.trim() : "",
+    email: typeof user.email === "string" ? user.email.trim().toLowerCase() : ""
+  };
+}

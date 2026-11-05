@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { validateUser } from '../../src/validator.js';
+import { validateUser, sanitizeUser } from '../../src/validator.js';
 
 describe('Unit Test: validateUser', () => {
   it('deve validar com sucesso um usuário com nome e e-mail válidos', () => {
@@ -31,5 +31,15 @@ describe('Unit Test: validateUser', () => {
 
     expect(result.isValid).toBe(false);
     expect(result.errors).toContain('Dados de usuário inválidos');
+  });
+
+  it('deve sanitizar os dados removendo espaços extras e convertendo email para minúsculo', () => {
+    const input = { name: '  Ana Paula  ', email: '  ANA.PAULA@EXAMPLE.COM  ' };
+    const sanitized = sanitizeUser(input);
+
+    expect(sanitized).toEqual({
+      name: 'Ana Paula',
+      email: 'ana.paula@example.com'
+    });
   });
 });
