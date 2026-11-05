@@ -8,7 +8,9 @@ export function validateUser(user) {
     return { isValid: false, errors: ["Dados de usuário inválidos"] };
   }
 
-  if (!user.name || typeof user.name !== "string" || user.name.trim().length < 3) {
+  // BUG INTENCIONAL PARA O EXPERIMENTO 2:
+  // Alguém alterou a regra exigindo 50 caracteres para o nome, quebrando o sistema
+  if (!user.name || typeof user.name !== "string" || user.name.trim().length < 50) {
     errors.push("O nome deve ter pelo menos 3 caracteres.");
   }
 
