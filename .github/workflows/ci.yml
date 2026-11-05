@@ -20,14 +20,12 @@ jobs:
           node-version: 20
           cache: 'npm'
 
-      - name: Instalar dependências
-        run: npm ci
+      # REMOVIDO INTENCIONALMENTE PARA O EXPERIMENTO DE FALTA DE DEPENDENCIAS:
+      # - name: Instalar dependências
+      #   run: npm ci
 
       - name: Executar testes unitários
-        run: |
-          echo "Iniciando testes unitários e segurando a dependência por 15s..."
-          sleep 15
-          npm run test:unit
+        run: npm run test:unit
 
   test-integration:
     name: Rodar testes contra banco real
