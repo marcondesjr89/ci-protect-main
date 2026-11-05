@@ -1,0 +1,29 @@
+{
+  "name": "ci-protect-main",
+  "version": "1.0.0",
+  "description": "API protegida por pipeline de CI para validacao de merge na main",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "vitest run",
+    "test:unit": "vitest run test/unit",
+    "test:integration": "vitest run test/integration"
+  },
+  "keywords": [
+    "ci",
+    "github-actions",
+    "pipeline",
+    "tdd"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.21.2",
+    "pg": "^8.13.3"
+  },
+  "devDependencies": {
+    "supertest": "^7.0.0",
+    "vitest": "^3.0.7"
+  }
+}

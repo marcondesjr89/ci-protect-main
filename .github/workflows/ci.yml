@@ -1,0 +1,66 @@
+name: Protect Main
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  test-unit:
+    name: Rodar testes unitários
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Executar testes unitários
+        run: npm run test:unit
+
+  test-integration:
+    name: Rodar testes contra banco real
+    needs: test-unit
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: ${{ vars.CI_DB_USER || 'ci_runner' }}
+          POSTGRES_PASSWORD: ${{ secrets.CI_DB_PASSWORD || 'ci_runner_secret' }}
+          POSTGRES_DB: ${{ vars.CI_DB_NAME || 'ci_test_db' }}
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DATABASE_URL: postgresql://${{ vars.CI_DB_USER || 'ci_runner' }}:${{ secrets.CI_DB_PASSWORD || 'ci_runner_secret' }}@localhost:5432/${{ vars.CI_DB_NAME || 'ci_test_db' }}
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Executar testes de integração
+        run: npm run test:integration

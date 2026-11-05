@@ -1,0 +1,24 @@
+/**
+ * Validador de dados de usuário - Regra de negócio pura (Ideal para Testes Unitários)
+ */
+export function validateUser(user) {
+  const errors = [];
+
+  if (!user || typeof user !== "object") {
+    return { isValid: false, errors: ["Dados de usuário inválidos"] };
+  }
+
+  if (!user.name || typeof user.name !== "string" || user.name.trim().length < 3) {
+    errors.push("O nome deve ter pelo menos 3 caracteres.");
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!user.email || typeof user.email !== "string" || !emailRegex.test(user.email)) {
+    errors.push("E-mail com formato inválido.");
+  }
+
+  return {
+    isValid: errors.length === 0,
+    errors
+  };
+}
