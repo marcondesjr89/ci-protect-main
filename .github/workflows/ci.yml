@@ -24,7 +24,10 @@ jobs:
         run: npm ci
 
       - name: Executar testes unitários
-        run: npm run test:unit
+        run: |
+          echo "Iniciando testes unitários e segurando a dependência por 15s..."
+          sleep 15
+          npm run test:unit
 
   test-integration:
     name: Rodar testes contra banco real
